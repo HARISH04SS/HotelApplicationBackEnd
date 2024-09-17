@@ -14,6 +14,9 @@ app.use(cors({
     methods:['GET','POST','PATCH','DELETE']
 }));
 app.use(express.json());
+app.get('/', (req, res) => {
+    res.send('Welcome to the API!');
+  });
 app.use('/api/v1/auth',authRouter)
 app.use('/api/v1/admin', adminRouter);
 //app.use('/api/customer', customerRoutes);
