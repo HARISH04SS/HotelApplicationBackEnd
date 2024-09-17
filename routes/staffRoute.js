@@ -10,7 +10,9 @@ router.post('/staffregister',staffController.staffRegister)
 
 router.post('/stafflogin', staffController.staffLogin);
 
-router.put('/update-status/:requestId', staffController.updateStatus);
+router.patch('/update-status/:requestId', staffController.updateStatus);
+
+router.get('/getAssignedRequests/:staffId',staffController.getAssignedRequests)
 
 router.put('/update-availability/:staffId', staffController.availableStaus);
 

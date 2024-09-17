@@ -17,6 +17,23 @@ const fetchreqController = {
             res.status(500).json({ msg: 'Failed to fetch staff members' });
         }
     },
+
+    getAssignedRequests: async (req, res) => {
+    const staffId = req.params.staffId;
+
+    try {
+        const requests = await Request.find({ assignedStaff: staffId });
+        if (!requests || requests.length === 0) {
+            return res.status(404).json({ msg: 'No requests assigned to this staff member' });
+        }
+
+        res.json(requests);
+    } catch (err) {
+        console.error('Error fetching assigned requests:', err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+},
+
     
     
     

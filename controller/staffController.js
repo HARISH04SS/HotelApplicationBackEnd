@@ -39,7 +39,25 @@ const staffController = {
             res.status(500).json({ msg: 'Server error' });
         }
     },
+
+    getAssignedRequests: async (req, res) => {
+        const staffId = req.params.staffId;
+    
+        try {
+            const requests = await Request.find({ assignedStaff: staffId });
+            if (!requests || requests.length === 0) {
+                return res.status(404).json({ msg: 'No requests assigned to this staff member' });
+            }
+    
+            res.json(requests);
+        } catch (err) {
+            console.error('Error fetching assigned requests:', err);
+            res.status(500).json({ msg: 'Server error' });
+        }
+    },
+    
     updateStatus : async (req, res) => {
+        const {requestId} = req.params;
         const { status } = req.body;
     
         const validStatuses = ['pending', 'in progress', 'completed'];
@@ -49,7 +67,7 @@ const staffController = {
         }
     
         try {
-            const request = await Request.findById(req.params.requestId);
+            const request = await Request.findById(requestId);
             if (!request) return res.status(404).json({ msg: 'Request not found' });
     
             request.status = status;

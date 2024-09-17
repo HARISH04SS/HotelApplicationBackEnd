@@ -11,6 +11,7 @@ const cors = require('cors');
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true, 
+    methods:['GET','POST','PATCH','DELETE']
 }));
 app.use(express.json());
 app.use('/api/v1/auth',authRouter)
