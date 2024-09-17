@@ -62,32 +62,45 @@ const adminController = {
 
     allocateroom: async (req, res) => {
         const { residentId, roomId } = req.body;
-        const room = await Room.findById(roomId);
-        const resident = await Resident.findById(residentId);
     
-        if (room && room.isAvailable) {
+        try {
+            const room = await Room.findById(roomId);
+            const resident = await Resident.findById(residentId);
+    
+            if (!room || !resident) {
+                return res.status(400).json({ msg: 'Invalid room or resident ID' });
+            }
+    
+            if (!room.isAvailable) {
+                return res.status(400).json({ msg: 'Room not available' });
+            }
+    
             room.assignedTo = residentId;
             room.isAvailable = false;
             await room.save();
+
+            resident.room = roomId;
+            resident.checkIn = new Date();  
+            await resident.save();          
     
-            // Send Twilio message
-            client.messages.create({
+            await client.messages.create({
                 body: `Room ${room.roomNumber} assigned to you. Contact us for any queries.`,
                 from: process.env.TWILIO_PHONE_NUMBER,
-                to: Resident.phoneNumber
+                to: resident.phoneNumber 
             });
     
             res.json({ msg: 'Room assigned and message sent' });
-        } else {
-            res.status(400).json({ msg: 'Room not available' });
+        } catch (error) {
+            console.error('Error in room allocation:', error);
+            res.status(500).json({ msg: 'Server error' });
         }
     },
+    
 
     deallocateroom: async (req, res) => {
         const { residentId, roomId } = req.body;
         
         try {
-            // Find the room and customer
             const room = await Room.findById(roomId);
             const resident = await Resident.findById(residentId);
     
@@ -95,12 +108,9 @@ const adminController = {
                 return res.status(404).json({ msg: 'Room or Customer not found' });
             }
     
-            // Ensure the room is currently allocated to this customer
             if (room.assignedTo.toString() !== residentId.toString()) {
                 return res.status(400).json({ msg: 'Room is not allocated to this customer' });
             }
-    
-            // Deallocate the room and update the customer's room assignment
             room.isAvailable = true;
             room.assignedTo = null;
             resident.room = null;
@@ -116,7 +126,6 @@ const adminController = {
 
     availablerooms: async (req, res) => {
         try {
-            // Find all rooms where isAvailable is true
             const availableRooms = await Room.find({ isAvailable: true });
             
             if (availableRooms.length === 0) {

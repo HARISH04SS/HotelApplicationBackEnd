@@ -10,7 +10,7 @@ const app = express();
 const cors = require('cors');
 app.use(cors({
     origin: 'http://localhost:5173',
-    credentials: true, // Allow cookies and authentication
+    credentials: true, 
 }));
 app.use(express.json());
 app.use('/api/v1/auth',authRouter)

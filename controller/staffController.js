@@ -42,10 +42,8 @@ const staffController = {
     updateStatus : async (req, res) => {
         const { status } = req.body;
     
-        // List of valid statuses
         const validStatuses = ['pending', 'in progress', 'completed'];
     
-        // Check if the status is valid
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ msg: `Invalid status value: ${status}` });
         }
@@ -65,7 +63,7 @@ const staffController = {
     },
     
     availableStaus:async (req, res) => {
-        const { isAvailable } = req.body; // true or false
+        const { isAvailable } = req.body;
         try {
             const staff = await Staff.findById(req.params.staffId);
             if (!staff) return res.status(404).json({ msg: 'Staff not found' });

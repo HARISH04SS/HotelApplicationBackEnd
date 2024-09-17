@@ -1,4 +1,5 @@
 const Request = require('../models/requestSchema');
+const Staff = require('../models/staffSchema')
 const fetchreqController = {
     fetch: async (req, res) => {
         try {
@@ -8,6 +9,17 @@ const fetchreqController = {
             res.status(500).json({ msg: 'Server error' });
         }
     },
+    getAllStaff : async (req, res) => {
+        try {
+            const staff = await Staff.find();  
+            res.json({ staff });
+        } catch (error) {
+            res.status(500).json({ msg: 'Failed to fetch staff members' });
+        }
+    },
+    
+    
+    
     assignToStaff: async (req, res) => {
             const { staffId } = req.body;
         

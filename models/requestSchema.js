@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const requestSchema = new mongoose.Schema({
     resident: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'residents',  // Assuming you have a Resident model
+        ref: 'residents',  
         required: true
     },
     description: {
@@ -12,7 +12,7 @@ const requestSchema = new mongoose.Schema({
     },
     assignedStaff: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Staff',  // Assuming you have a Staff model
+        ref: 'Staff',  
         default: null
     },
     status: {

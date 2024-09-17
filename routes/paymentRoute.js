@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-// Handle Stripe payment
 router.post('/make-payment', async (req, res) => {
     const { amount, currency, paymentMethodId } = req.body;
 
