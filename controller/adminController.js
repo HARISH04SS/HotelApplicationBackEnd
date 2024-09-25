@@ -5,8 +5,18 @@ const twilio = require('twilio');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { jwt_secret } = require("../utils/config");
-const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-
+//const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const nodemailer = require("nodemailer");
+const transporter = nodemailer.createTransport({
+    // host: "smtp.ethereal.email",
+    // port: 587,
+    // secure: false, // true for port 465, false for other ports
+    service: "Gmail",
+    auth: {
+      user: "harishsubramanian4122001@gmail.com",
+      pass: "hkho fwas vlyp xdiy",
+    },
+  });  
 const adminController = {
     register: async (req,res) => {
         try{
@@ -83,11 +93,36 @@ const adminController = {
             resident.checkIn = new Date();  
             await resident.save();          
     
-            await client.messages.create({
-                body: `Room ${room.roomNumber} assigned to you. Contact us for any queries.`,
-                from: process.env.TWILIO_PHONE_NUMBER,
-                to: resident.phoneNumber 
+            // await client.messages.create({
+            //     body: `Room ${room.roomNumber} assigned to you. Contact us for any queries.`,
+            //     from: process.env.TWILIO_PHONE_NUMBER,
+            //     to: resident.phoneNumber 
+            // });
+            // const info = await transporter.sendMail({
+            //     from: 'harishsubramanian4122001@gmail.com', 
+            //     to: resident.email, 
+            //     subject: `Room ${room.roomNumber} Allocation`, // Use backticks
+            //     text: `Dear ${resident.name},\n\nYour room ${room.roomNumber} has been successfully allocated. Please contact us if you have any questions.\n\nBest regards,\nThe Admin Team`, // Use backticks
+            //     html: `<b><img src="https://i.pinimg.com/originals/c9/bc/00/c9bc002f6ba5a5bcab6dbbcf1301835f.png"/></b>`, // Corrected quotes for img src
+            // });
+            const info = await transporter.sendMail({
+                from: 'harishsubramanian4122001@gmail.com', 
+                to: resident.email, 
+                subject: `Room number ${room.roomNumber} Allocation`, // Use backticks for string interpolation
+                text: `Dear ${resident.name},\n\nYour room ${room.roomNumber} has been successfully allocated. Please contact us if you have any questions.\n\nBest regards,\nThe Admin Team`, // Plain text version
+                html: `
+                    <p>Dear ${resident.name},</p>
+                    <p>Your room number <b>${room.roomNumber}</b> has been successfully allocated.</p>
+                    <p>Please contact us if you have any questions.</p>
+                    <br/>
+                    <p>Best regards,<br/>The Admin Team</p>
+                    <br/>
+                    <img src="https://i.pinimg.com/originals/c9/bc/00/c9bc002f6ba5a5bcab6dbbcf1301835f.png" alt="Logo"/> <!-- Corrected HTML structure -->
+                `, // HTML version with better formatting
             });
+            
+            
+              console.log("Message sent: %s", info.messageId);
     
             res.json({ msg: 'Room assigned and message sent' });
         } catch (error) {

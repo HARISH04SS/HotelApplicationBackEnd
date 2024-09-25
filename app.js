@@ -11,7 +11,7 @@ const cors = require('cors');
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true, 
-    methods:['GET','POST','PATCH','DELETE']
+    methods:['GET','POST','PATCH','PUT','DELETE']
 }));
 app.use(express.json());
 app.get('/', (req, res) => {
