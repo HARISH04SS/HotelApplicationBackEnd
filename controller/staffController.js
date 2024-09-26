@@ -27,6 +27,10 @@ const staffController = {
     staffLogin: async (req, res) => {
         const { email, password } = req.body;
         try {
+            if (!process.env.JWT_SECRET) {
+                throw new Error('JWT_SECRET is not defined');
+            }
+    
             const staff = await Staff.findOne({ email });
             if (!staff) return res.status(400).json({ msg: 'Staff not found' });
     
