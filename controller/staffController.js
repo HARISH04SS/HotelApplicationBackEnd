@@ -27,7 +27,7 @@ const staffController = {
     staffLogin: async (req, res) => {
         const { email, password } = req.body;
         try {
-            if (!process.env.JWT_SECRET) {
+            if (!jwt_secret) {
                 throw new Error('JWT_SECRET is not defined');
             }
     
@@ -37,7 +37,7 @@ const staffController = {
             const isMatch = await bcrypt.compare(password, staff.password);
             if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
     
-            const token = jwt.sign({ id: staff._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ id: staff._id }, jwt_secret, { expiresIn: '1h' });
             res.json({ token, staff });
         } catch (error) {
             // Log the error with a specific message
