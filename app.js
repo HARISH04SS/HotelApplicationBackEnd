@@ -8,10 +8,25 @@ const requestRouter = require('./routes/requestRoute');
 const fetchreqAssingRouter = require('./routes/fetchreqAssingRoute')
 const app = express();
 const cors = require('cors');
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://main--peppy-dolphin-89bcee.netlify.app'
+];
+// app.use(cors({
+//     origin: 'http://localhost:5173',
+//     credentials: true, 
+//     methods:['GET','POST','PATCH','PUT','DELETE']
+// }));
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true, 
-    methods:['GET','POST','PATCH','PUT','DELETE']
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']
 }));
 app.use(express.json());
 app.get('/', (req, res) => {
