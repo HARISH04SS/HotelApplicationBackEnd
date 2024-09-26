@@ -35,9 +35,11 @@ const staffController = {
     
             const token = jwt.sign({ id: staff._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
             res.json({ token, staff });
-        } catch (err) {
-            res.status(500).json({ msg: 'Server error' });
-        }
+        } catch (error) {
+            // Log the error with a specific message
+            console.error('Staff Login Error:', error.message, error.stack);
+            res.status(500).json({ message: 'Internal server error. Please try again later.' });
+          }
     },
 
     getAssignedRequests: async (req, res) => {
