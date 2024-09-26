@@ -10,7 +10,10 @@ const app = express();
 const cors = require('cors');
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://main--peppy-dolphin-89bcee.netlify.app'
+  'https://main--peppy-dolphin-89bcee.netlify.app',
+  'https://main--peppy-dolphin-89bcee.netlify.app/admin',
+  'https://main--peppy-dolphin-89bcee.netlify.app/staff',
+
 ];
 // app.use(cors({
 //     origin: 'http://localhost:5173',
