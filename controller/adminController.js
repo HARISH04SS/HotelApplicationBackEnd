@@ -108,8 +108,8 @@ const adminController = {
             const info = await transporter.sendMail({
                 from: 'harishsubramanian4122001@gmail.com', 
                 to: resident.email, 
-                subject: `Room number ${room.roomNumber} Allocation`, // Use backticks for string interpolation
-                text: `Dear ${resident.name},\n\nYour room ${room.roomNumber} has been successfully allocated. Please contact us if you have any questions.\n\nBest regards,\nThe Admin Team`, // Plain text version
+                subject: `Room number ${room.roomNumber} Allocation`, 
+                text: `Dear ${resident.name},\n\nYour room ${room.roomNumber} has been successfully allocated. Please contact us if you have any questions.\n\nBest regards,\nThe Admin Team`,
                 html: `
                     <p>Dear ${resident.name},</p>
                     <p>Your room number <b>${room.roomNumber}</b> has been successfully allocated.</p>
@@ -118,7 +118,7 @@ const adminController = {
                     <p>Best regards,<br/>The Admin Team</p>
                     <br/>
                     <img src="https://i.pinimg.com/originals/c9/bc/00/c9bc002f6ba5a5bcab6dbbcf1301835f.png" alt="Logo"/> <!-- Corrected HTML structure -->
-                `, // HTML version with better formatting
+                `, 
             });
             
             
