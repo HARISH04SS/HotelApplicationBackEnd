@@ -13,7 +13,7 @@ const allowedOrigins = [
   'https://main--peppy-dolphin-89bcee.netlify.app',
   'https://main--peppy-dolphin-89bcee.netlify.app/admin',
   'https://main--peppy-dolphin-89bcee.netlify.app/staff',
-
+  'https://main--peppy-dolphin-89bcee.netlify.app/register'
 ];
  app.use(cors({
      origin: 'http://localhost:5173',
